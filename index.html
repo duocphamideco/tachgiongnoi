@@ -3,31 +3,52 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IDECO - Tách Audio từ YouTube</title>
+<title>IDECO - YouTube Audio & Tách mẫu giọng</title>
 <style>
-:root{--red:#d71920;--red2:#b31319;--bg:#f5f7fb;--text:#182033;--muted:#64748b;--line:#dfe5ec}
+:root{
+  --red:#d71920;--red2:#b31319;--bg:#f4f7fb;--txt:#172033;--mut:#64748b;
+  --line:#dfe5ec;--green:#15803d;--purple:#6d28d9;--blue:#2563eb
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(135deg,#f8fafc,#eef3f8);color:var(--text)}
-.wrap{max-width:760px;margin:0 auto;padding:34px 16px}
+body{margin:0;background:linear-gradient(135deg,#f8fafc,#eef3f8);font-family:Arial,Helvetica,sans-serif;color:var(--txt)}
+.wrap{max-width:980px;margin:auto;padding:28px 16px 50px}
 .head{display:flex;gap:14px;align-items:center;margin-bottom:18px}
-.logo{width:64px;height:64px;border-radius:17px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900}
-h1{font-size:25px;margin:0}.sub{margin-top:6px;color:var(--muted);line-height:1.5}
-.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 14px 40px #0f172a12}
-label{display:block;font-weight:800;margin-bottom:8px}
-.row{display:grid;grid-template-columns:1fr 170px;gap:10px}
-input{width:100%;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:16px;outline:none}
-input:focus{border-color:var(--red);box-shadow:0 0 0 3px #d7192015}
-button{border:0;border-radius:12px;padding:14px 16px;font-weight:900;font-size:15px;cursor:pointer}
+.logo{width:64px;height:64px;border-radius:16px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900}
+h1{margin:0;font-size:26px}.sub{margin:5px 0 0;color:var(--mut)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tabbtn{border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px;font-weight:900;cursor:pointer}
+.tabbtn.active{background:var(--red);color:#fff;border-color:var(--red)}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 12px 35px #0f172a12}
+.panel{display:none}.panel.active{display:block}
+.row{display:grid;grid-template-columns:1fr 180px;gap:10px}
+input[type=url],input[type=number],select{
+  width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;font-size:15px;background:#fff
+}
+button{width:100%;border:0;border-radius:12px;padding:13px 14px;font-size:15px;font-weight:800;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
 .primary{background:var(--red);color:#fff}.primary:hover{background:var(--red2)}
-.primary:disabled{opacity:.45;cursor:not-allowed}
-.status{display:none;margin-top:17px;padding:13px 14px;border-radius:12px;background:#f8fafc;color:#475569;line-height:1.55}
-.error{background:#fff1f2;color:#b91c1c}
-.ok{background:#ecfdf5;color:#15803d}
-.result{display:none;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.clone{background:var(--purple);color:#fff}.secondary{background:#fff;border:1px solid var(--line)}
+.status{display:none;margin-top:14px;padding:12px 14px;border-radius:12px;background:#f8fafc;color:#475569;line-height:1.5}
+.status.error{background:#fff1f2;color:#b91c1c}.status.ok{background:#ecfdf5;color:#15803d}
+.result{display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
 audio{width:100%;margin:10px 0 14px}
-.download{display:block;text-align:center;text-decoration:none;background:#111827;color:white;border-radius:12px;padding:14px;font-weight:900}
-.note{margin-top:16px;font-size:12px;color:var(--muted);line-height:1.55}
-@media(max-width:620px){.row{grid-template-columns:1fr}.card{padding:17px}h1{font-size:21px}}
+.downloadLink{display:block;text-align:center;text-decoration:none;background:#111827;color:#fff;border-radius:12px;padding:13px 14px;font-weight:900}
+.drop{display:block;border:2px dashed #cbd5e1;border-radius:18px;padding:28px 18px;text-align:center;cursor:pointer;background:#fbfdff}
+.drop.drag{border-color:var(--red);background:#fff5f5}.drop b{font-size:18px}.drop small{display:block;margin-top:8px;color:var(--mut)}
+input[type=file]{display:none}.meta{display:none;margin-top:14px;padding:12px 14px;background:#f8fafc;border-radius:12px;font-size:14px}
+video{display:none;width:100%;max-height:330px;margin-top:15px;background:#000;border-radius:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+.help{font-size:12px;color:var(--mut);margin-top:6px;line-height:1.45}
+.progressBox{display:none;margin-top:18px}.track{height:12px;background:#e5e7eb;border-radius:999px;overflow:hidden}.bar{height:100%;width:0;background:var(--red)}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.tip{margin-top:18px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:14px;padding:14px;line-height:1.55;font-size:13px;color:#4c1d95}
+.badge{display:inline-block;background:#ecfdf5;color:#15803d;border-radius:999px;padding:4px 8px;font-size:12px;font-weight:800}
+.note{margin-top:14px;font-size:12px;color:var(--mut);line-height:1.55}
+@media(max-width:700px){
+  .tabs,.row,.grid,.actions{grid-template-columns:1fr}
+  .card{padding:15px}h1{font-size:22px}
+}
 </style>
 </head>
 <body>
@@ -35,45 +56,140 @@ audio{width:100%;margin:10px 0 14px}
   <div class="head">
     <div class="logo">IDECO</div>
     <div>
-      <h1>TÁCH AUDIO TỪ LINK YOUTUBE</h1>
-      <div class="sub">Dán link → bấm TÁCH AUDIO → nghe thử → tải MP3.</div>
+      <h1>IDECO AUDIO TOOL</h1>
+      <div class="sub">Tách audio YouTube hoặc tạo mẫu giọng WAV để Voice Clone</div>
     </div>
   </div>
 
+  <div class="tabs">
+    <button class="tabbtn active" data-tab="youtube">🎵 TÁCH AUDIO YOUTUBE</button>
+    <button class="tabbtn" data-tab="voice">🎙️ TÁCH MẪU GIỌNG</button>
+  </div>
+
   <div class="card">
-    <label for="url">Link video YouTube</label>
-    <div class="row">
-      <input id="url" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
-      <button class="primary" id="extract">🎵 TÁCH AUDIO</button>
-    </div>
+    <!-- TAB YOUTUBE -->
+    <section id="youtube" class="panel active">
+      <h2 style="margin-top:0">TÁCH AUDIO TỪ LINK YOUTUBE</h2>
+      <div class="sub" style="margin-bottom:14px">Dán link → bấm TÁCH AUDIO → nghe thử → tải MP3.</div>
 
-    <div class="status" id="status"></div>
+      <div class="row">
+        <input id="ytUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off">
+        <button class="primary" id="ytExtract">🎵 TÁCH AUDIO</button>
+      </div>
 
-    <div class="result" id="result">
-      <b id="title"></b>
-      <audio id="audio" controls preload="metadata"></audio>
-      <a class="download" id="download" href="#">⬇️ TẢI FILE MP3</a>
-    </div>
+      <div class="status" id="ytStatus"></div>
 
-    <div class="note">
-      Chỉ xử lý video mà anh sở hữu hoặc được phép tải/chuyển đổi. Ứng dụng cần chạy cùng backend đi kèm;
-      GitHub Pages thuần chỉ hiển thị giao diện và không tự lấy audio từ YouTube.
-    </div>
+      <div class="result" id="ytResult">
+        <b id="ytTitle"></b>
+        <audio id="ytAudio" controls preload="metadata"></audio>
+        <a class="downloadLink" id="ytDownload" href="#">⬇️ TẢI FILE MP3</a>
+      </div>
+
+      <div class="note">
+        Chỉ xử lý video mà anh sở hữu hoặc được phép tải/chuyển đổi.
+      </div>
+    </section>
+
+    <!-- TAB VOICE -->
+    <section id="voice" class="panel">
+      <h2 style="margin-top:0">TÁCH MẪU GIỌNG → SAYDI VOICE CLONE</h2>
+      <div class="sub" style="margin-bottom:14px">
+        Upload video, chọn đoạn ngắn 5–30 giây, tạo WAV sạch để clone giọng
+        <span class="badge">Chrome / Edge</span>
+      </div>
+
+      <label class="drop" id="drop" for="file">
+        <b>🎬 Chọn hoặc kéo video vào đây</b>
+        <small>Nên chọn video có 1 người nói rõ, ít nhạc nền và ít tiếng ồn.</small>
+      </label>
+      <input id="file" type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.avi,.mkv">
+      <div class="meta" id="meta"></div>
+      <video id="video" controls playsinline></video>
+
+      <div class="grid">
+        <div class="field">
+          <label>Bắt đầu từ giây</label>
+          <input id="start" type="number" min="0" step="0.5" value="0">
+          <div class="help">Ví dụ 12.5 = lấy từ giây 12,5.</div>
+        </div>
+        <div class="field">
+          <label>Độ dài mẫu</label>
+          <select id="duration">
+            <option value="5">5 giây</option>
+            <option value="8">8 giây</option>
+            <option value="10" selected>10 giây — khuyên dùng</option>
+            <option value="15">15 giây</option>
+            <option value="20">20 giây</option>
+            <option value="30">30 giây</option>
+          </select>
+          <div class="help">Mẫu ngắn giúp file nhẹ và dễ clone.</div>
+        </div>
+        <div class="field">
+          <label>Lọc giọng cơ bản</label>
+          <select id="filter">
+            <option value="on" selected>Bật — làm rõ lời nói</option>
+            <option value="off">Tắt — giữ nguyên audio</option>
+          </select>
+          <div class="help">Lọc nhẹ, không phải AI tách nhạc hoàn toàn.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px">
+        <button class="primary" id="extract" disabled>🎙️ TẠO MẪU GIỌNG CHO CLONE</button>
+      </div>
+
+      <div class="progressBox" id="progressBox">
+        <div class="track"><div class="bar" id="bar"></div></div>
+        <div class="status" id="status" style="display:block;background:transparent;padding:0"></div>
+      </div>
+
+      <div class="result" id="result">
+        <div style="color:var(--green);font-weight:800">✅ Mẫu giọng đã sẵn sàng</div>
+        <audio id="audio" controls></audio>
+        <div class="actions">
+          <button class="primary" id="download">⬇️ TẢI WAV</button>
+          <button class="clone" id="saydi">🧬 TẢI WAV & MỞ SAYDI CLONE</button>
+          <button class="secondary" id="again">🔄 VIDEO KHÁC</button>
+        </div>
+      </div>
+
+      <div class="tip">
+        <b>Voice Clone:</b> trình duyệt không cho website IDECO tự gắn file vào ô Upload của SayDi.
+        Vì vậy quy trình là: <b>tạo WAV → tải WAV → mở SayDi Clone → chọn file WAV vừa tải.</b>
+      </div>
+    </section>
   </div>
 </div>
 
 <script>
-const API = 'https://audio-backend-kvl9.onrender.com';
+// =======================
+// TAB SWITCH
+// =======================
+document.querySelectorAll('.tabbtn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  };
+});
 
-5. // Nếu frontend và backend khác domain, điền URL backend, VD: https://abc.onrender.com
-const $ = id => document.getElementById(id);
-const btn=$('extract'), url=$('url'), status=$('status'), result=$('result'),
-      audio=$('audio'), download=$('download'), title=$('title');
+// =======================
+// YOUTUBE AUDIO
+// =======================
+const API='https://audio-backend-kvl9.onrender.com';
+const ytUrl=document.getElementById('ytUrl');
+const ytExtract=document.getElementById('ytExtract');
+const ytStatus=document.getElementById('ytStatus');
+const ytResult=document.getElementById('ytResult');
+const ytAudio=document.getElementById('ytAudio');
+const ytDownload=document.getElementById('ytDownload');
+const ytTitle=document.getElementById('ytTitle');
 
-function showStatus(text,type=''){
-  status.style.display='block';
-  status.className='status '+type;
-  status.textContent=text;
+function showYtStatus(text,type=''){
+  ytStatus.style.display='block';
+  ytStatus.className='status '+type;
+  ytStatus.textContent=text;
 }
 function validYouTube(u){
   try{
@@ -81,15 +197,13 @@ function validYouTube(u){
     return ['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(x.hostname);
   }catch{return false}
 }
-
-btn.onclick=async()=>{
-  const u=url.value.trim();
-  result.style.display='none';
-  audio.removeAttribute('src');
-  if(!validYouTube(u)){ showStatus('Vui lòng dán đúng link YouTube.','error'); return; }
-
-  btn.disabled=true;
-  showStatus('Đang lấy và chuyển audio sang MP3…');
+ytExtract.onclick=async()=>{
+  const u=ytUrl.value.trim();
+  ytResult.style.display='none';
+  ytAudio.removeAttribute('src');
+  if(!validYouTube(u)){showYtStatus('Vui lòng dán đúng link YouTube.','error');return;}
+  ytExtract.disabled=true;
+  showYtStatus('Đang lấy và chuyển audio sang MP3…');
   try{
     const r=await fetch(API+'/api/extract',{
       method:'POST',
@@ -97,23 +211,182 @@ btn.onclick=async()=>{
       body:JSON.stringify({url:u})
     });
     const data=await r.json().catch(()=>({}));
-    if(!r.ok) throw new Error(data.error||'Không tách được audio.');
-
-    title.textContent=data.title||'Audio đã sẵn sàng';
+    if(!r.ok) throw new Error(data.detail || data.error || 'Không tách được audio.');
+    ytTitle.textContent=data.title||'Audio đã sẵn sàng';
     const fileUrl=API+data.fileUrl;
-    audio.src=fileUrl;
-    download.href=fileUrl;
-    download.download=(data.filename||'youtube_audio.mp3');
-    result.style.display='block';
-    showStatus('✅ Hoàn tất. Anh có thể nghe thử hoặc tải MP3.','ok');
+    ytAudio.src=fileUrl;
+    ytDownload.href=fileUrl;
+    ytDownload.download=data.filename||'youtube_audio.mp3';
+    ytResult.style.display='block';
+    showYtStatus('✅ Hoàn tất. Anh có thể nghe thử hoặc tải MP3.','ok');
   }catch(e){
-    showStatus('Không thực hiện được: '+e.message,'error');
+    showYtStatus('Không thực hiện được: '+e.message,'error');
   }finally{
-    btn.disabled=false;
+    ytExtract.disabled=false;
   }
 };
+ytUrl.addEventListener('keydown',e=>{if(e.key==='Enter')ytExtract.click()});
 
-url.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click()});
+// =======================
+// VOICE SAMPLE
+// =======================
+const SAYDI='https://voice.saydi.ai/vi/studio/clone/';
+const $=id=>document.getElementById(id);
+const inp=$('file'),drop=$('drop'),meta=$('meta'),vid=$('video'),extract=$('extract'),
+      start=$('start'),duration=$('duration'),filter=$('filter'),progressBox=$('progressBox'),
+      bar=$('bar'),status=$('status'),result=$('result'),audio=$('audio'),
+      download=$('download'),saydi=$('saydi'),again=$('again');
+
+let chosen=null,outBlob=null,outUrl=null,ctx=null;
+
+function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function fmt(n){const u=['B','KB','MB','GB'];let i=0;while(n>=1024&&i<3){n/=1024;i++}return n.toFixed(i?1:0)+' '+u[i]}
+function setFile(f){
+  if(!f)return;
+  chosen=f;
+  meta.style.display='block';
+  meta.innerHTML='<b>'+esc(f.name)+'</b><br>Dung lượng: '+fmt(f.size)+' • '+(f.type||'video');
+  if(vid.src)URL.revokeObjectURL(vid.src);
+  vid.src=URL.createObjectURL(f);
+  vid.style.display='block';
+  extract.disabled=false;
+  result.style.display='none';
+  progressBox.style.display='none';
+}
+inp.onchange=e=>setFile(e.target.files[0]);
+['dragenter','dragover'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.add('drag')}));
+['dragleave','drop'].forEach(x=>drop.addEventListener(x,e=>{e.preventDefault();drop.classList.remove('drag')}));
+drop.addEventListener('drop',e=>setFile(e.dataTransfer.files[0]));
+
+function wavBlob(buf){
+  const rate=buf.sampleRate,frames=buf.length,ab=new ArrayBuffer(44+frames*2),v=new DataView(ab);
+  const wr=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}
+  wr(0,'RIFF');v.setUint32(4,36+frames*2,true);wr(8,'WAVE');wr(12,'fmt ');
+  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,rate,true);
+  v.setUint32(28,rate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
+  wr(36,'data');v.setUint32(40,frames*2,true);
+  let off=44;const arr=[];
+  for(let c=0;c<buf.numberOfChannels;c++)arr.push(buf.getChannelData(c));
+  for(let i=0;i<frames;i++){
+    let s=0;for(const a of arr)s+=a[i];s/=arr.length;s=Math.max(-1,Math.min(1,s));
+    v.setInt16(off,s<0?s*32768:s*32767,true);off+=2
+  }
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+async function cropAndFilter(decoded,st,len){
+  const sr=decoded.sampleRate;
+  const s=Math.max(0,Math.floor(st*sr));
+  const e=Math.min(decoded.length,s+Math.floor(len*sr));
+  if(e<=s)throw new Error('Thời điểm bắt đầu nằm ngoài thời lượng video.');
+  const frames=e-s;
+  const off=new OfflineAudioContext(1,frames,sr);
+  const tmp=off.createBuffer(decoded.numberOfChannels,frames,sr);
+  for(let c=0;c<decoded.numberOfChannels;c++)tmp.copyToChannel(decoded.getChannelData(c).subarray(s,e),c,0);
+  const src=off.createBufferSource();src.buffer=tmp;
+  let last=src;
+  if(filter.value==='on'){
+    const hp=off.createBiquadFilter();hp.type='highpass';hp.frequency.value=90;
+    const lp=off.createBiquadFilter();lp.type='lowpass';lp.frequency.value=8500;
+    const comp=off.createDynamicsCompressor();comp.threshold.value=-24;comp.knee.value=18;comp.ratio.value=3;comp.attack.value=.005;comp.release.value=.2;
+    last.connect(hp);hp.connect(lp);lp.connect(comp);last=comp;
+  }
+  last.connect(off.destination);src.start();
+  return await off.startRendering();
+}
+
+async function directMode(st,len){
+  status.textContent='Đang giải mã audio trong video…';bar.style.width='18%';
+  ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+  const arr=await chosen.arrayBuffer();
+  const decoded=await ctx.decodeAudioData(arr.slice(0));
+  bar.style.width='60%';
+  const processed=await cropAndFilter(decoded,st,len);
+  bar.style.width='88%';
+  outBlob=wavBlob(processed);
+}
+
+async function waitEvent(el,event){
+  return new Promise((res,rej)=>{
+    const ok=()=>{clean();res()};
+    const bad=()=>{clean();rej(new Error('Không đọc được video'))};
+    const clean=()=>{el.removeEventListener(event,ok);el.removeEventListener('error',bad)};
+    el.addEventListener(event,ok,{once:true});
+    el.addEventListener('error',bad,{once:true});
+  })
+}
+
+async function compatibleMode(st,len){
+  status.textContent='Đang dùng chế độ tương thích Chrome/Edge…';bar.style.width='8%';
+  if(!vid.captureStream && !vid.mozCaptureStream)throw new Error('Video codec này không được trình duyệt hỗ trợ.');
+  if(!isFinite(vid.duration)||!vid.duration){await waitEvent(vid,'loadedmetadata')}
+  if(st>=vid.duration)throw new Error('Giây bắt đầu lớn hơn thời lượng video.');
+  vid.currentTime=st;await waitEvent(vid,'seeked');
+  const stream=(vid.captureStream||vid.mozCaptureStream).call(vid);
+  const audioTracks=stream.getAudioTracks();
+  if(!audioTracks.length)throw new Error('Không tìm thấy track âm thanh trong video.');
+  const audioStream=new MediaStream(audioTracks);
+  const types=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus'];
+  const mime=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
+  const rec=new MediaRecorder(audioStream,mime?{mimeType:mime}:undefined),chunks=[];
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  const stopped=new Promise((res,rej)=>{rec.onstop=res;rec.onerror=e=>rej(e.error||e)});
+  rec.start(250);vid.muted=true;await vid.play();
+  const actual=Math.min(len,vid.duration-st);
+  let elapsed=0;
+  await new Promise(resolve=>{
+    const t=setInterval(()=>{
+      elapsed=vid.currentTime-st;
+      bar.style.width=Math.min(82,10+(elapsed/actual)*70)+'%';
+      status.textContent='Đang lấy mẫu giọng… '+elapsed.toFixed(1)+' / '+actual.toFixed(1)+' giây';
+      if(elapsed>=actual||vid.ended){clearInterval(t);resolve()}
+    },100);
+  });
+  vid.pause();rec.stop();await stopped;
+  const cap=new Blob(chunks,{type:mime||'audio/webm'});
+  ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+  status.textContent='Đang chuyển mẫu thành WAV…';bar.style.width='90%';
+  const decoded=await ctx.decodeAudioData((await cap.arrayBuffer()).slice(0));
+  const processed=await cropAndFilter(decoded,0,decoded.duration);
+  outBlob=wavBlob(processed);vid.muted=false;
+}
+
+extract.onclick=async()=>{
+  if(!chosen)return;
+  const st=Math.max(0,Number(start.value)||0),len=Math.max(3,Number(duration.value)||10);
+  extract.disabled=true;result.style.display='none';progressBox.style.display='block';bar.style.width='2%';
+  try{
+    try{await directMode(st,len)}catch(e){console.warn('direct mode:',e);await compatibleMode(st,len)}
+    if(!outBlob||!outBlob.size)throw new Error('File âm thanh tạo ra rỗng.');
+    if(outBlob.size>10*1024*1024)throw new Error('Mẫu lớn hơn 10 MB. Hãy chọn đoạn ngắn hơn.');
+    if(outUrl)URL.revokeObjectURL(outUrl);
+    outUrl=URL.createObjectURL(outBlob);audio.src=outUrl;
+    bar.style.width='100%';
+    status.style.color='var(--green)';
+    status.textContent='Hoàn tất — mẫu WAV '+fmt(outBlob.size)+' đã sẵn sàng để clone.';
+    result.style.display='block';
+  }catch(e){
+    console.error(e);
+    status.style.color='#b91c1c';
+    status.textContent='Không tạo được mẫu: '+(e.message||e)+'. Nên thử MP4 H.264/AAC trên Chrome/Edge.';
+  }finally{extract.disabled=false}
+};
+
+function filename(){
+  return (chosen?.name||'video').replace(/\.[^.]+$/,'')+'_SAYDI_CLONE_SAMPLE.wav';
+}
+function save(){
+  if(!outUrl)return;
+  const a=document.createElement('a');a.href=outUrl;a.download=filename();
+  document.body.appendChild(a);a.click();a.remove();
+}
+download.onclick=save;
+saydi.onclick=()=>{if(!outUrl)return;save();window.open(SAYDI,'_blank','noopener,noreferrer')};
+again.onclick=()=>{
+  inp.value='';chosen=null;meta.style.display='none';vid.pause();vid.style.display='none';vid.removeAttribute('src');
+  result.style.display='none';progressBox.style.display='none';extract.disabled=true;audio.removeAttribute('src');
+  if(outUrl){URL.revokeObjectURL(outUrl);outUrl=null}outBlob=null;
+};
 </script>
 </body>
 </html>
